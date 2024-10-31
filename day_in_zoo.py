@@ -25,28 +25,28 @@ class Enclosure:
         self.is_open = False
         self.animals = []
 
-    def open_enclosure(self, name):
+    def open_enclosure(self):
         if self.is_open:
-            print(f"The '{self.name}' enclosure is already open.")
+            print(f"The {self.name} is already open.")
         else:
             self.is_open = True
-            print(f"The '{self.name}' enclosure is now open.")
+            print(f"The {self.name} is now open.")
 
-    def close_enclosure(self, name):
+    def close_enclosure(self):
         if self.is_open:
             self.is_open = False
-            print(f"The '{self.name}' enclosure is now closed.")
+            print(f"The {self.name} is now closed.")
         else:
-            print(f"The '{self.name}' enclosure is not open.")
+            print(f"The {self.name} is not open.")
 
     def add_animal(self, animal):
         self.animals.append(animal)
-        print(f"An animal: {animal} is added to the enclosure.")
+        print(f"An animal: {animal.name} is added to the enclosure.")
 
     def status(self):
         clean_status = "clean" if self.is_clean else "dirty"
         open_status = "open" if self.is_open else "closed"
-        print(f"The enclosure status is: {clean_status}, {open_status}")
+        print(f"The {self.name} status is: {clean_status}, {open_status}")
         for animal in self.animals:
             animal.status()
 
@@ -60,22 +60,22 @@ class Animal:
     def status(self):
         happiness_status = "happy" if self.is_happy else "sad"
         hungry_status = "hungry" if self.is_hungry else "not hungry"
-        print(f"The animal status is: {happiness_status}, {hungry_status}")
+        print(f"The {self.name} status is: {happiness_status}, {hungry_status}")
 
 
 class Lion(Animal):
     def __init__(self, name):
-        super().__init__(name, "Lion")
+        super().__init__(name)
 
 
 class Bear(Animal):
     def __init__(self, name):
-        super().__init__(name, "Bear")
+        super().__init__(name)
 
 
 class Racoon(Animal):
     def __init__(self, name):
-        super().__init__(name, "Racoon")
+        super().__init__(name)
 
 
 def main():
@@ -109,6 +109,10 @@ def main():
     enclosure1.close_enclosure()
     enclosure2.close_enclosure()
     enclosure3.close_enclosure()
+
+    enclosure1.status()
+    enclosure2.status()
+    enclosure3.status()
 
 
 if __name__ == "__main__":
