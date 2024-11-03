@@ -54,14 +54,18 @@ class AESCipher:
 
 
 class RSACipher:
-    def __init__(self, key_size=512):
-        (self.public_key, self.private_key) = rsa.newkeys(key_size)
+    def __init__(self, public_key=None, private_key=None, key_size=512):
+        if public_key is not None and private_key is not None:
+            self.public_key = public_key
+            self.private_key = private_key
+        else:
+            (self.public_key, self.private_key) = rsa.newkeys(key_size)
 
     def encrypt(self, message):
         return rsa.encrypt(message.encode(), self.public_key)
 
     def decrypt(self, message):
-        return rsa.decrypt(message.encode(), self.private_key).decode()
+        return rsa.decrypt(message, self.private_key).decode()
 
 
 def get_user_mode():
@@ -137,13 +141,26 @@ def main():
         if mode == "encrypt":
             print("Encrypted message:", aes.encrypt(message))
         elif mode == "decrypt":
-            encrypted_message = input("Enter the encrypted message: ")
-            print("Decrypted message:", aes.decrypt(encrypted_message))
+            print("Decrypted message:", aes.decrypt(message))
         else:
             print("Invalid choice.")
 
     elif choice == "3":
-        rsa_cipher = RSACipher()
+        try:
+            with open('public_key.pem', 'rb') as f:
+                public_key = rsa.PublicKey.load_pkcs1(f.read())
+            with open('private_key.pem', 'rb') as f:
+                private_key = rsa.PrivateKey.load_pkcs1(f.read())
+            rsa_cipher = RSACipher(public_key=public_key, private_key=private_key)
+            print("Loaded existing RSA keys.")
+        except FileNotFoundError:
+            rsa_cipher = RSACipher()
+            with open('public_key.pem', 'wb') as f:
+                f.write(rsa_cipher.public_key.save_pkcs1())
+            with open('private_key.pem', 'wb') as f:
+                f.write(rsa_cipher.private_key.save_pkcs1())
+            print("Generated new RSA keys.")
+
         mode = get_user_mode()
 
         if mode == "encrypt":
@@ -154,7 +171,8 @@ def main():
         elif mode == "decrypt":
             encrypted_message = input("Enter the encrypted message (as bytes): ")
             encrypted_message = ast.literal_eval(encrypted_message)
-            print("Decrypted message:", rsa_cipher.decrypt(encrypted_message))
+            decrypted_message = rsa_cipher.decrypt(encrypted_message)
+            print("Decrypted message:", decrypted_message)
         else:
             print("Invalid choice.")
 
