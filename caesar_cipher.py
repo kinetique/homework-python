@@ -1,5 +1,6 @@
 from cryptography.fernet import Fernet
 import rsa
+import ast
 """Caesar Cipher, by Al Sweigart al@inventwithpython.com
 The Caesar cipher is a shift cipher that uses addition and subtraction
 to encrypt and decrypt letters.
@@ -57,7 +58,7 @@ class RSACipher:
         (self.public_key, self.private_key) = rsa.newkeys(key_size)
 
     def encrypt(self, message):
-        return rsa.encrypt(message.encode(), self.public_key).decode()
+        return rsa.encrypt(message.encode(), self.public_key)
 
     def decrypt(self, message):
         return rsa.decrypt(message.encode(), self.private_key).decode()
@@ -92,23 +93,70 @@ def get_user_key():
 
 
 def main():
-    mode = get_user_mode()  # Let the user enter if they are encrypting or decrypting
-    key = get_user_key()  # Let the user enter the key to use
+    print("Select encryption method:\n1. Caesar Cipher\n2. AES Cipher\n3. RSA Cipher")
+    choice = input("> ").strip()
 
-    coder = CaesarCipher(key)
+    if choice == "1":
+        mode = get_user_mode()  # Let the user enter if they are encrypting or decrypting
+        key = get_user_key()  # Let the user enter the key to use
 
-    # Let the user enter the message to encrypt/decrypt
-    print(f"Enter the message to {mode}.")
-    message = input("> ").upper()  # Caesar cipher only works on uppercase letters
+        coder = CaesarCipher(key)
 
-    if mode == "encrypt":
-        # Stores the encrypted/decrypted form of the message
-        translated = coder.encrypt(message)
-    else:
-        translated = coder.decrypt(message)
+        # Let the user enter the message to encrypt/decrypt
+        print(f"Enter the message to {mode}.")
+        message = input("> ").upper()  # Caesar cipher only works on uppercase letters
+
+        if mode == "encrypt":
+            # Stores the encrypted/decrypted form of the message
+            translated = coder.encrypt(message)
+        else:
+            translated = coder.decrypt(message)
 
     # Display the encrypted/decrypted string to the screen
-    print(translated)
+        print(translated)
+
+    if choice == "2":
+        print("Do you want to (g)enerate a new key or (u)se an existing key?")
+        key_choice = input("> ").strip().lower()
+
+        if key_choice == "g":
+            key = Fernet.generate_key()
+            print(f"Generated AES Key: {key.decode()}")
+            aes = AESCipher(key)
+        elif key_choice == "u":
+            key = input("Enter your existing AES key: ").encode()
+            aes = AESCipher(key)
+        else:
+            print("Invalid choice.")
+            return
+
+        mode = get_user_mode()
+        print(f"Enter the message to {mode}.")
+        message = input("> ")
+
+        if mode == "encrypt":
+            print("Encrypted message:", aes.encrypt(message))
+        elif mode == "decrypt":
+            encrypted_message = input("Enter the encrypted message: ")
+            print("Decrypted message:", aes.decrypt(encrypted_message))
+        else:
+            print("Invalid choice.")
+
+    elif choice == "3":
+        rsa_cipher = RSACipher()
+        mode = get_user_mode()
+
+        if mode == "encrypt":
+            message = input("Enter the message: ")
+            encrypted_message = rsa_cipher.encrypt(message)
+            print("Encrypted message:", encrypted_message)
+            print("Public Key:", rsa_cipher.public_key.save_pkcs1().decode())
+        elif mode == "decrypt":
+            encrypted_message = input("Enter the encrypted message (as bytes): ")
+            encrypted_message = ast.literal_eval(encrypted_message)
+            print("Decrypted message:", rsa_cipher.decrypt(encrypted_message))
+        else:
+            print("Invalid choice.")
 
 
 if __name__ == "__main__":
