@@ -1,4 +1,5 @@
 from cryptography.fernet import Fernet
+import rsa
 """Caesar Cipher, by Al Sweigart al@inventwithpython.com
 The Caesar cipher is a shift cipher that uses addition and subtraction
 to encrypt and decrypt letters.
@@ -49,6 +50,18 @@ class AESCipher:
 
     def decrypt(self, message):
         return self.cipher.decrypt(message.encode()).decode()
+
+
+class RSACipher:
+    def __init__(self, key_size=512):
+        (self.public_key, self.private_key) = rsa.newkeys(key_size)
+
+    def encrypt(self, message):
+        return rsa.encrypt(message.encode(), self.public_key).decode()
+
+    def decrypt(self, message):
+        return rsa.decrypt(message.encode(), self.private_key).decode()
+
 
 def get_user_mode():
     while True:  # Keep asking until the user enters e or d.
