@@ -1,3 +1,4 @@
+from cryptography.fernet import Fernet
 """Caesar Cipher, by Al Sweigart al@inventwithpython.com
 The Caesar cipher is a shift cipher that uses addition and subtraction
 to encrypt and decrypt letters.
@@ -35,6 +36,19 @@ class CaesarCipher:
                 decrypted += symbol
         return f"Decrypted message: {decrypted}"
 
+
+class AESCipher:
+    def __init__(self, key=None):
+        if key is None:
+            key = Fernet.generate_key()
+        self.cipher = Fernet(key)
+        self.key = key
+
+    def encrypt(self, message):
+        return self.cipher.encrypt(message.encode()).decode()
+
+    def decrypt(self, message):
+        return self.cipher.decrypt(message.encode()).decode()
 
 def get_user_mode():
     while True:  # Keep asking until the user enters e or d.
