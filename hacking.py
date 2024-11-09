@@ -1,4 +1,5 @@
 import random
+import string
 
 
 class Computer:
@@ -16,6 +17,15 @@ class Computer:
 
         self.password = random.choice(list(self.memory.values()))
 
+    def generate_display(self):
+        display_lines = []
+        for address, word in self.memory.items():
+            random_prefix = ''.join(random.choices(string.punctuation, k=6))
+            random_suffix = ''.join(random.choices(string.punctuation, k=6))
+            display_line = f"{address} {random_prefix}{word}{random_suffix}"
+            display_lines.append(display_line)
+        return display_lines
+
     def check_guess(self, guess):
         correct_count = 0
         for i in range(len(self.password)):
@@ -31,8 +41,8 @@ class Hacker:
 
     def play(self):
         print("Find the password in the computer's memory:")
-        for address, word in self.computer.memory.items():
-            print(f"{address} {word}")
+        for line in self.computer.generate_display():
+            print(line)
 
         while self.attempts_left > 0:
             print(f"Enter a password: ({self.attempts_left} tries remaining)")
