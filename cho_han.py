@@ -35,6 +35,10 @@ class ChoHan:
         die1, die2 = self.roll_dice()
         result = self.cho_han_sum(die1, die2)
 
+        print("The dealer lifts the cup to reveal:")
+        print(f"{JAPANESE_NUMBERS[die1]} - {JAPANESE_NUMBERS[die2]}")
+        print(f"{die1} - {die2}")
+
         if result == players_choice:
             winnings = bet_amount - self.HOUSE_FEE
             self.player.update_money(winnings)
