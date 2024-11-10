@@ -49,11 +49,19 @@ class Rook(Piece):
 
 
 class Queen(Piece):
-    pass
+    def move_any(self, new_x, new_y):
+        if self.x == new_x or self.y == new_y or abs(self.x - new_x) == abs(self.y - new_y):
+            return True
+        else:
+            return False
 
 
 class King(Piece):
-    pass
+    def move_one_square(self, new_x, new_y):
+        if abs(self.x - new_x) <= 1 and abs(self.y - new_y) <= 1:
+            return True
+        else:
+            return False
 
 
 class Board:
