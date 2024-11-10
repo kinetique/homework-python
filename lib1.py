@@ -9,31 +9,31 @@ class Book:
         return f"Title: {self.title},\nAuthor: {self.author},\nISBN: {self.isbn},\nYear published: {self.year_published}"
 
 
-class FictionBook:
+class FictionBook(Book):
     def __init__(self, title, author, isbn, year_published, genre):
         super().__init__(title, author, isbn, year_published)
         self.genre = genre
 
     def get_info(self):
-        return f"{super().get_info()},\nGenre: {self.genre}"
+        return f"{super().get_info()},\nGenre: {self.genre}\n\n"
 
 
-class NonFictionBook:
+class NonFictionBook(Book):
     def __init__(self, title, author, isbn, year_published, topic):
         super().__init__(title, author, isbn, year_published)
         self.topic = topic
 
     def get_info(self):
-        return f"{super().get_info()},\nTopic: {self.topic}"
+        return f"{super().get_info()},\nTopic: {self.topic}\n\n"
 
 
-class ReferenceBook:
+class ReferenceBook(Book):
     def __init__(self, title, author, isbn, year_published, description):
         super().__init__(title, author, isbn, year_published)
         self.description = description
 
     def get_info(self):
-        return f"{super().get_info()},\nDescription: {self.description}"
+        return f"{super().get_info()},\nDescription: {self.description}\n\n"
 
 
 class Library:
@@ -44,7 +44,7 @@ class Library:
         self.books.append(book)
 
     def remove_book(self, isbn):
-        return [book for book in self.books if book.isbn != isbn]
+        self.books = [book for book in self.books if book.isbn != isbn]
 
     def get_books(self):
         return [book.get_info() for book in self.books]
@@ -68,27 +68,27 @@ def main():
     library.add_book(NonFictionBook("The Immortal Life of Henrietta Lacks", "Rebecca Skloot", "9781400052189", 2010, "Biography"))
     library.add_book(ReferenceBook("Gray's Anatomy", "Henry Gray", "9781455582327", 1858, "Medical reference for human anatomy"))
 
-    print("All books in library:")
-    print(library.get_info())
+    print("--All books in library:--")
+    print("".join(library.get_books()))
 
-    print ("Fiction books in library:")
-    print(library.get_books_by_category("Fiction"))
+    print("--Fiction books in library:--")
+    print("".join(library.get_books_by_category(FictionBook)))
 
-    print ("Non-Fiction books in library:")
-    print(library.get_books_by_category("NonFiction"))
+    print("--Non-Fiction books in library:--")
+    print("".join(library.get_books_by_category(NonFictionBook)))
 
-    print ("Reference books in library:")
-    print(library.get_books_by_category("Reference"))
+    print("--Reference books in library:--")
+    print("".join(library.get_books_by_category(ReferenceBook)))
 
-    print("Books by Harper Lee:")
-    print(library.get_books_by_author("Harper Lee"))
+    print("--Books by Harper Lee:--")
+    print("".join(library.get_books_by_author("Harper Lee")))
 
-    print("Books published in 1949:")
-    print(library.get_books_by_year(1949))
+    print("--Books published in 1949:--")
+    print("".join(library.get_books_by_year(1949)))
 
     library.remove_book("9780399590504")
-    print("All books in library after removal:")
-    print(library.get_books())
+    print("--All books in library after removal:--")
+    print("".join(library.get_books()))
 
 
 if __name__ == "__main__":
