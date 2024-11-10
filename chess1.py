@@ -23,7 +23,13 @@ class Pawn(Piece):
 
 
 class Knight(Piece):
-    pass
+    def move_in_L_shape(self, new_x, new_y):
+        if abs(self.x - new_x) == 2 and abs(self.y - new_y) == 1:
+            return True
+        elif abs(self.x - new_x) == 1 and abs(self.y - new_y) == 2:
+            return True
+        else:
+            return False
 
 
 class Bishop(Piece):
