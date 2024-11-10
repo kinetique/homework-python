@@ -13,7 +13,13 @@ class Piece:
 
 
 class Pawn(Piece):
-    pass
+    def move_forward(self, new_x, new_y):
+        if self.x == new_x and abs(self.y - new_y) in [1,2] and self.y == 2:
+            return True
+        elif self.x == new_x and abs(self.y - new_y) == 1:
+            return True
+        else:
+            return False
 
 
 class Knight(Piece):
