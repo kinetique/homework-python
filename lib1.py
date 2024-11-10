@@ -10,7 +10,7 @@ class Book:
 
 
 class FictionBook:
-    def __init__(self, title, author, isbn, year_published, genre)
+    def __init__(self, title, author, isbn, year_published, genre):
         super().__init__(title, author, isbn, year_published)
         self.genre = genre
 
@@ -37,7 +37,27 @@ class ReferenceBook:
 
 
 class Library:
-    pass
+    def __init__(self):
+        self.books = []
+
+    def add_book(self, book):
+        self.books.append(book)
+
+    def remove_book(self, book):
+        self.books.remove(book)
+
+    def get_info(self):
+        return [book.get_info() for book in self.books]
+
+    def get_books_by_category(self, category):
+        return [book.get_info() for book in self.books if isinstance(book, category)]
+
+    def get_books_by_author(self, author):
+        return [book.get_info() for book in self.books if book.author == author]
+
+    def get_books_by_year(self, year_published):
+        return [book.get_info() for book in self.books if book.year_published == year_published]
+
 
 if __name__ == "__main__":
     pass
