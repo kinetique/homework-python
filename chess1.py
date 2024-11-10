@@ -14,7 +14,7 @@ class Piece:
 
 class Pawn(Piece):
     def move_forward(self, new_x, new_y):
-        if self.x == new_x and abs(self.y - new_y) in [1,2] and self.y == 2:
+        if self.x == new_x and abs(self.y - new_y) in [1, 2] and self.y == 1:
             return True
         elif self.x == new_x and abs(self.y - new_y) == 1:
             return True
@@ -42,7 +42,7 @@ class Bishop(Piece):
 
 class Rook(Piece):
     def move_straight(self, new_x, new_y):
-        if self.x == new_x and self.y == new_y:
+        if self.x == new_x or self.y == new_y:
             return True
         else:
             return False
@@ -108,3 +108,43 @@ class Board:
             return piece.move_one_square(new_x, new_y)
         else:
             return False
+
+
+def main():
+    board = Board()
+
+    white_pawn = Pawn("White", 1, 1)
+    black_knight = Knight("Black", 1, 7)
+    white_bishop = Bishop("White", 2, 0)
+    black_rook = Rook("Black", 0, 7)
+    white_queen = Queen("White", 3, 0)
+    black_king = King("Black", 4, 7)
+
+    board.place_piece(white_pawn, 1, 1)
+    board.place_piece(black_knight, 1, 7)
+    board.place_piece(white_bishop, 2, 0)
+    board.place_piece(black_rook, 0, 7)
+    board.place_piece(white_queen, 3, 0)
+    board.place_piece(black_king, 4, 7)
+
+    print("All pieces on the board:")
+    for piece in board.get_all_pieces():
+        print(piece)
+
+    print("\nTest moves:")
+    print(f"Can we move white pawn on 1,3? {board.is_valid_move(white_pawn, 1, 3)}")
+    print(f"Can we move white pawn on 2,2? {board.is_valid_move(white_pawn, 2, 2)}")
+    print(f"Can we move black_knight on 2,5? {board.is_valid_move(black_knight, 2, 5)}")
+    print(f"Can we move white bishop on 5,3? {board.is_valid_move(white_bishop, 5, 3)}")
+    print(f"Can we move black rook on 0,5? {board.is_valid_move(black_rook, 0, 5)}")
+    print(f"Can we move white queen on 5,5? {board.is_valid_move(white_queen, 5, 5)}")
+    print(f"Can we move black king on 6,5? {board.is_valid_move(black_king, 6, 5)}")
+
+    board.remove_piece(1, 1)
+    print("\nAfter removing white pawn:")
+    for piece in board.get_all_pieces():
+        print(piece)
+
+
+if __name__ == '__main__':
+    main()
