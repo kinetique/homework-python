@@ -33,11 +33,19 @@ class Knight(Piece):
 
 
 class Bishop(Piece):
-    pass
+    def move_diagonal(self, new_x, new_y):
+        if abs(self.x - new_x) == abs(self.y - new_y):
+            return True
+        else:
+            return False
 
 
 class Rook(Piece):
-    pass
+    def move_straight(self, new_x, new_y):
+        if self.x == new_x and self.y == new_y:
+            return True
+        else:
+            return False
 
 
 class Queen(Piece):
